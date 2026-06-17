@@ -8,8 +8,17 @@ var cls = require("../lib/class"),
 
 module.exports = DatabaseHandler = cls.Class.extend({
     init: function(config){
-        client = redis.createClient(config.redis_port, config.redis_host, {socket_nodelay: true});
-        client.auth(config.redis_password || "");
+        client = redis.createClient(config.redis_port, config.redis_host, {
+            socket_nodelay: true
+        });
+        
+        if (config.redis_password) {
+            client.auth(config.redis_password);
+        }
+        
+        client.on("error", function(err) {
+            log.error("Redis error: " + err);
+        });
     },
     loadPlayer: function(player){
         var self = this;
