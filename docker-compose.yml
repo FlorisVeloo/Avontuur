@@ -1,6 +1,8 @@
 services:
   browserquest:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     expose:
       - "8000"
     depends_on:
@@ -11,6 +13,8 @@ services:
     command: redis-server --appendonly yes
     volumes:
       - browserquest_redis:/data
+    expose:
+      - "6379"
 
 volumes:
   browserquest_redis:
